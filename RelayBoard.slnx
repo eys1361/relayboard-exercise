@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="RelayBoard.Api.Tests/RelayBoard.Api.Tests.csproj" />
+  <Project Path="RelayBoard.Api/RelayBoard.Api.csproj" />
+</Solution>

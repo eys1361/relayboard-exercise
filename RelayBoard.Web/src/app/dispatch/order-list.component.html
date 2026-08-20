@@ -1,0 +1,42 @@
+<div class="panel">
+  <header class="panel-head">
+    <h2>Orders</h2>
+    <span class="count">{{ orders.length }}</span>
+  </header>
+
+  @if (orders.length === 0) {
+    <p class="empty">No orders match this filter.</p>
+  }
+
+  <ul class="rows">
+    @for (order of orders; track order.id) {
+      <li>
+        <button
+          type="button"
+          class="row"
+          [class.selected]="order.id === selectedOrderId"
+          (click)="orderSelected.emit(order)"
+        >
+          <div class="row-top">
+            <span class="number">{{ order.orderNumber }}</span>
+            <span class="status" [attr.data-status]="order.status">{{ order.status }}</span>
+          </div>
+          <div class="customer">{{ order.customerName }}</div>
+          <div class="addr">PU {{ order.pickup.display }}</div>
+          <div class="addr">DO {{ order.dropoff.display }}</div>
+          <div class="meta">
+            @if (order.requiredVehicleType) {
+              <span class="chip">{{ order.requiredVehicleType }}</span>
+            }
+            <span class="chip">PU by {{ order.pickupBy | date: 'shortTime' }}</span>
+            <span class="chip">DO by {{ order.deliverBy | date: 'shortTime' }}</span>
+            @if (order.assignedDriverName) {
+              <span class="chip">{{ order.assignedDriverName }}</span>
+            }
+            <span class="ready">{{ order.readyAt | date: 'shortTime' }}</span>
+          </div>
+        </button>
+      </li>
+    }
+  </ul>
+</div>

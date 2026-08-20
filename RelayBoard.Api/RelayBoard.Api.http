@@ -1,0 +1,24 @@
+@host = http://localhost:5120
+
+GET {{host}}/api/orders?status=OPEN
+
+###
+
+GET {{host}}/api/drivers
+
+###
+
+GET {{host}}/api/drivers/nearby?lat=40.7580&lng=-73.9855
+
+###
+
+GET {{host}}/api/lookups
+
+###
+
+POST {{host}}/api/orders/2/assign
+Content-Type: application/json
+
+{
+  "driverId": 1
+}

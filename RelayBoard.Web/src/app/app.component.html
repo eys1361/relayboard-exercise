@@ -1,0 +1,47 @@
+<div class="shell">
+  <header class="top">
+    <div>
+      <h1>RelayBoard</h1>
+      <p>Same-day dispatch</p>
+    </div>
+    <div class="filters">
+      <button type="button" [class.active]="statusFilter === 'OPEN'" (click)="setFilter('OPEN')">Open</button>
+      <button type="button" [class.active]="statusFilter === 'ASSIGNED'" (click)="setFilter('ASSIGNED')">Assigned</button>
+      <button type="button" [class.active]="statusFilter === ''" (click)="setFilter('')">All</button>
+      <button type="button" class="ghost" (click)="refresh()">Refresh</button>
+    </div>
+  </header>
+
+  @if (error) {
+    <div class="banner">{{ error }}</div>
+  }
+
+  <section class="board">
+    <app-order-list
+      [orders]="orders"
+      [selectedOrderId]="selectedOrder?.id ?? null"
+      (orderSelected)="selectOrder($event)"
+    />
+    <div class="detail">
+      @if (selectedOrder) {
+        <h2>{{ selectedOrder.orderNumber }}</h2>
+        <p class="muted">{{ selectedOrder.customerName }} · {{ selectedOrder.status }}</p>
+        <p><strong>Pickup</strong> {{ selectedOrder.pickup.display }} by {{ selectedOrder.pickupBy | date: 'shortTime' }}</p>
+        <p><strong>Dropoff</strong> {{ selectedOrder.dropoff.display }} by {{ selectedOrder.deliverBy | date: 'shortTime' }}</p>
+        @if (selectedOrder.notes) {
+          <p class="notes">{{ selectedOrder.notes }}</p>
+        }
+        <p class="hint">Assign a driver from the rail. Suggestions, ranking, and the map are the pairing ticket — see TICKET.md.</p>
+      } @else {
+        <h2>No order selected</h2>
+        <p class="muted">Select an open order, then assign a driver.</p>
+      }
+    </div>
+    <app-driver-rail
+      [drivers]="drivers"
+      [canAssign]="selectedOrder !== null"
+      [busy]="busy"
+      (assign)="assign($event)"
+    />
+  </section>
+</div>

@@ -1,0 +1,120 @@
+:host {
+  display: block;
+  height: 100%;
+  min-height: 0;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #fff;
+  border: 1px solid #d7dde6;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid #d7dde6;
+}
+
+.panel-head h2 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #3d4a5c;
+}
+
+.count {
+  font-size: 12px;
+  color: #5b6b7c;
+}
+
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+}
+
+.row {
+  padding: 12px 14px;
+  border-bottom: 1px solid #e6ebf1;
+}
+
+.row-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.name {
+  font-weight: 650;
+}
+
+.status {
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  color: #5b6b7c;
+}
+
+.status[data-status='AVAILABLE'] {
+  color: #1f6a3a;
+}
+
+.status[data-status='ON_JOB'] {
+  color: #8a5a12;
+}
+
+.status[data-status='OFF_DUTY'] {
+  color: #7a8794;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+  align-items: center;
+}
+
+.chip {
+  font-size: 11px;
+  padding: 2px 6px;
+  border: 1px solid #d7dde6;
+  border-radius: 4px;
+  color: #3d4a5c;
+}
+
+.coords {
+  margin-left: auto;
+  font-size: 11px;
+  color: #7a8794;
+  font-variant-numeric: tabular-nums;
+}
+
+.assign {
+  margin-top: 10px;
+  border: 1px solid #2f6fed;
+  background: #fff;
+  color: #2f6fed;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.assign:disabled {
+  border-color: #d7dde6;
+  color: #9aa6b2;
+  cursor: not-allowed;
+}

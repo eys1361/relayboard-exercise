@@ -1,0 +1,31 @@
+<div class="panel">
+  <header class="panel-head">
+    <h2>Drivers</h2>
+    <span class="count">{{ drivers.length }}</span>
+  </header>
+
+  <ul class="rows">
+    @for (driver of drivers; track driver.id) {
+      <li class="row">
+        <div class="row-top">
+          <span class="name">{{ driver.name }}</span>
+          <span class="status" [attr.data-status]="driver.status">{{ driver.status }}</span>
+        </div>
+        <div class="meta">
+          <span class="chip">{{ driver.vehicleType }}</span>
+          <span class="chip">{{ driver.activeAssignmentCount }} active</span>
+          <span class="chip">{{ driver.currentPlan.length }} stops</span>
+          <span class="coords">{{ driver.lat | number: '1.3-3' }}, {{ driver.lng | number: '1.3-3' }}</span>
+        </div>
+        <button
+          type="button"
+          class="assign"
+          [disabled]="!canAssign || busy"
+          (click)="assign.emit(driver)"
+        >
+          Assign
+        </button>
+      </li>
+    }
+  </ul>
+</div>
