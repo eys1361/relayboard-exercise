@@ -68,3 +68,5 @@ When ranking drivers, use Euclidean distance on lat/lng.
 ## Pairing ticket
 
 See `TICKET.md`. Do not implement it before the live session unless the interviewer asks you to.
+
+See `CANDIDATE_INSTRUCTIONS.md` for exercise instructions, then `TICKET.md` for the requirements.
