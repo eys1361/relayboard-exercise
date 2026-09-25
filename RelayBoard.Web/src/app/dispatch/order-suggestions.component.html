@@ -1,0 +1,47 @@
+<div class="suggestions-section">
+  <h3>Top Driver Suggestions</h3>
+
+  @if (loading) {
+    <p class="status-msg">Finding optimal drivers...</p>
+  } @else if (!suggestions || suggestions.length === 0) {
+    <div class="empty-suggestions">
+      <p>No qualifying drivers available for this order.</p>
+    </div>
+  } @else {
+    <ul class="suggestion-list">
+      @for (suggestion of suggestions; track suggestion.driverId) {
+        <li class="suggestion-card">
+          <div class="card-header">
+            <span class="driver-name">{{ suggestion.driverName }}</span>
+            <span class="badge vehicle">{{ suggestion.vehicleType }}</span>
+          </div>
+
+          <div class="metrics">
+            <span class="metric"><strong>{{ suggestion.milesToPickup }}</strong> mi to pickup</span>
+            <span class="metric"><strong>{{ suggestion.extraMiles }}</strong> extra mi</span>
+            <span class="metric slip" [class.has-slip]="suggestion.slaSlipMinutes > 0">
+              @if (suggestion.slaSlipMinutes === 0) {
+                0 min SLA slip
+              } @else {
+                +{{ suggestion.slaSlipMinutes }} min SLA slip
+              }
+            </span>
+          </div>
+
+          @if (suggestion.reason) {
+            <p class="reason">{{ suggestion.reason }}</p>
+          }
+
+          <button
+            type="button"
+            class="assign-btn"
+            [disabled]="busy"
+            (click)="assignDriver.emit(suggestion.driverId)"
+          >
+            Assign
+          </button>
+        </li>
+      }
+    </ul>
+  }
+</div>

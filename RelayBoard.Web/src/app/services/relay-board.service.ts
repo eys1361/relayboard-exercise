@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Driver } from '../models/driver.model';
+import { DriverSuggestion } from '../models/driver-suggestion.model';
 import { Lookups } from '../models/lookups.model';
 import { Order } from '../models/order.model';
 
@@ -28,6 +29,10 @@ export class RelayBoardService {
 
   getLookups(): Observable<Lookups> {
     return this.http.get<Lookups>(`${this.baseUrl}/lookups`);
+  }
+
+  getDriverSuggestions(orderId: number): Observable<DriverSuggestion[]> {
+    return this.http.get<DriverSuggestion[]>(`${this.baseUrl}/orders/${orderId}/suggestions`);
   }
 
   assignDriver(orderId: number, driverId: number): Observable<Order> {

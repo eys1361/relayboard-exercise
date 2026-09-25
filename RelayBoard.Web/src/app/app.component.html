@@ -31,7 +31,17 @@
         @if (selectedOrder.notes) {
           <p class="notes">{{ selectedOrder.notes }}</p>
         }
-        <p class="hint">Assign a driver from the rail. Suggestions, ranking, and the map are the pairing ticket — see TICKET.md.</p>
+
+        @if (selectedOrder.status === 'OPEN') {
+          <app-order-suggestions
+            [suggestions]="suggestions"
+            [loading]="loadingSuggestions"
+            [busy]="busy"
+            (assignDriver)="assignById($event)"
+          />
+        } @else {
+          <p class="hint">Order is {{ selectedOrder.status }}. Assigned to {{ selectedOrder.assignedDriverName ?? 'driver' }}.</p>
+        }
       } @else {
         <h2>No order selected</h2>
         <p class="muted">Select an open order, then assign a driver.</p>
