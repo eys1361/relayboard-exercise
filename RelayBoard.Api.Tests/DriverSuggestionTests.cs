@@ -22,7 +22,7 @@ public class DriverSuggestionTests : IClassFixture<RelayBoardApiFactory>
         _client = factory.CreateClient();
     }
 
-    [Fact(Skip = "Implement TICKET.md")]
+    [Fact]
     public async Task Idle_van_ranks_ahead_of_nearby_on_job_van_with_tight_sla()
     {
         var orders = await _client.GetFromJsonAsync<List<JsonElement>>("/api/orders?status=OPEN", JsonOptions);
@@ -45,7 +45,30 @@ public class DriverSuggestionTests : IClassFixture<RelayBoardApiFactory>
         {
             Assert.True(carla.SlaSlipMinutes > suggestions[0].SlaSlipMinutes);
         }
-        // Assert.True(suggestions[0].Score >= suggestions[^1].Score);
+    }
+
+    [Fact]
+    public async Task Non_existent_order_returns_not_found()
+    {
+        var response = await _client.GetAsync("/api/orders/99999/suggestions");
+        Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Order_without_vehicle_constraint_returns_up_to_3_suggestions()
+    {
+        var orders = await _client.GetFromJsonAsync<List<JsonElement>>("/api/orders?status=OPEN", JsonOptions);
+        var unconstrainedOrder = orders!.First(o =>
+            o.GetProperty("orderNumber").GetString() == "RB-1002");
+
+        var orderId = unconstrainedOrder.GetProperty("id").GetInt32();
+        var suggestions = await _client.GetFromJsonAsync<List<SuggestionSketch>>(
+            $"/api/orders/{orderId}/suggestions",
+            JsonOptions);
+
+        Assert.NotNull(suggestions);
+        Assert.True(suggestions.Count <= 3);
+        Assert.NotEmpty(suggestions);
     }
 
     private sealed class SuggestionSketch
@@ -57,6 +80,5 @@ public class DriverSuggestionTests : IClassFixture<RelayBoardApiFactory>
         public double ExtraMiles { get; set; }
         public int SlaSlipMinutes { get; set; }
         public string Reason { get; set; } = "";
-        // public double Score { get; set; }
     }
 }

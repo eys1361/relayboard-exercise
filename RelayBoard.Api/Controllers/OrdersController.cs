@@ -42,4 +42,14 @@ public class OrdersController(IOrderService orders) : ControllerBase
 
         return Ok(result.Order);
     }
+
+    [HttpGet("{id:int}/suggestions")]
+    public async Task<ActionResult<IReadOnlyList<DriverSuggestionDto>>> GetSuggestions(
+        int id,
+        [FromQuery] DateTime? now,
+        CancellationToken cancellationToken)
+    {
+        var suggestions = await orders.GetSuggestionsAsync(id, now, cancellationToken);
+        return suggestions is null ? NotFound() : Ok(suggestions);
+    }
 }

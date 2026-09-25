@@ -8,6 +8,7 @@ var connectionString = builder.Configuration.GetConnectionString("RelayBoard")
     ?? "Data Source=relayboard.db";
 
 builder.Services.AddDbContext<RelayBoardContext>(options => options.UseSqlite(connectionString));
+builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<IDriverService, DriverService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddControllers();

@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace RelayBoard.Api.Tests;
 
@@ -13,6 +15,16 @@ public class RelayBoardApiFactory : WebApplicationFactory<Program>
     {
         builder.UseEnvironment("Development");
         builder.UseSetting("ConnectionStrings:RelayBoard", $"Data Source={_dbPath}");
+        builder.ConfigureServices(services =>
+        {
+            services.RemoveAll<TimeProvider>();
+            services.AddSingleton<TimeProvider>(new FixedTimeProvider(new DateTime(2026, 8, 18, 14, 25, 0, DateTimeKind.Utc)));
+        });
+    }
+
+    private sealed class FixedTimeProvider(DateTime utcNow) : TimeProvider
+    {
+        public override DateTimeOffset GetUtcNow() => new DateTimeOffset(utcNow, TimeSpan.Zero);
     }
 
     protected override void Dispose(bool disposing)
