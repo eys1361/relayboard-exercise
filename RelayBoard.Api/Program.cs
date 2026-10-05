@@ -8,7 +8,9 @@ var connectionString = builder.Configuration.GetConnectionString("RelayBoard")
     ?? "Data Source=relayboard.db";
 
 builder.Services.AddDbContext<RelayBoardContext>(options => options.UseSqlite(connectionString));
-builder.Services.AddSingleton(TimeProvider.System);
+var demoNow = builder.Configuration.GetValue<DateTimeOffset?>("Demo:Now");
+builder.Services.AddSingleton<TimeProvider>(
+    demoNow is { } now ? new FixedTimeProvider(now) : TimeProvider.System);
 builder.Services.AddScoped<IDriverService, DriverService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddControllers();
@@ -40,4 +42,10 @@ app.UseCors();
 app.MapControllers();
 app.Run();
 
-public partial class Program;
+public partial class Program
+{
+    private sealed class FixedTimeProvider(DateTimeOffset utcNow) : TimeProvider
+    {
+        public override DateTimeOffset GetUtcNow() => utcNow;
+    }
+}

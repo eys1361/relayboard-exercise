@@ -22,7 +22,7 @@ public record AssignResult(bool Found, string? Error, OrderDto? Order)
     public static AssignResult Ok(OrderDto order) => new(true, null, order);
 }
 
-public class OrderService(RelayBoardContext db, TimeProvider? timeProvider = null) : IOrderService
+public class OrderService(RelayBoardContext db, TimeProvider timeProvider) : IOrderService
 {
     public async Task<IReadOnlyList<OrderDto>> GetOrdersAsync(
         string? status,
@@ -74,7 +74,7 @@ public class OrderService(RelayBoardContext db, TimeProvider? timeProvider = nul
             return AssignResult.Fail("Driver was not found.");
         }
 
-        var now = (timeProvider ?? TimeProvider.System).GetUtcNow().UtcDateTime;
+        var now = timeProvider.GetUtcNow().UtcDateTime;
 
         var previous = await db.Assignments
             .Where(a => a.OrderId == orderId && a.UnassignedAt == null)
@@ -130,7 +130,7 @@ public class OrderService(RelayBoardContext db, TimeProvider? timeProvider = nul
             return null;
         }
 
-        var now = nowOverride ?? (timeProvider ?? TimeProvider.System).GetUtcNow().UtcDateTime;
+        var now = nowOverride ?? timeProvider.GetUtcNow().UtcDateTime;
 
         var driverQuery = db.Drivers
             .AsNoTracking()
